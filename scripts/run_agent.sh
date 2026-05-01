@@ -5,6 +5,13 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 MICROROS_WS="$SCRIPT_DIR/../microros_ws"
 
+# Auto-fix ROS 2 workspace absolute paths dynamically if relocated
+OLD_PATH=$(grep -m 1 "COLCON_CURRENT_PREFIX=" "$MICROROS_WS/install/setup.sh" | cut -d= -f2 | tr -d "'\"" | sed 's|/install$||')
+if [ "$OLD_PATH" != "$MICROROS_WS" ] && [ -n "$OLD_PATH" ]; then
+    echo "Detected workspace relocation. Fixing paths..."
+    find "$MICROROS_WS/install" -type f \( -name "*.sh" -o -name "*.bash" -o -name "*.dsv" -o -name "*.py" -o -name "package.xml" -o -name "*.cmake" -o -name "*.repos" \) -exec sed -i "s|$OLD_PATH|$MICROROS_WS|g" {} +
+fi
+
 # Source ROS 2 and micro-ROS workspace
 source /opt/ros/humble/setup.bash
 source "$MICROROS_WS/install/setup.bash"
