@@ -107,10 +107,11 @@ cd ~/micro_ros_assignment/scripts/
 ./monitor_topics.sh
 ```
 
-You will see the states of all 3 LEDs updating in real-time, matching the physical blinking on the Raspberry Pi Pico.
+You will see the status string from the Pico updating in real-time — including the Name, Student ID, and all 8 LED states.
 
 If you want to view individual topics, you can also manually run:
 ```bash
+ros2 topic echo /blink_synk/status
 ros2 topic echo /led_agent/state
 ros2 topic echo /led_worker1/state
 ros2 topic echo /led_worker2/state
