@@ -6,9 +6,9 @@ The goal of this assignment is to understand how FreeRTOS tasks can synchronize 
 
 ## Step 0: Clone This Repository
 
-Sebelum memulai, pastikan kamu sudah mengunduh folder tugas ini ke komputermu. Karena komputer kamu mungkin masih baru, instal `git` terlebih dahulu:
+Before starting, make sure you download this assignment folder to your computer. If your computer is fresh, you will need to install `git` first:
 
-Buka terminal dan jalankan:
+Open a terminal and run:
 ```bash
 sudo apt update
 sudo apt install git -y
@@ -26,30 +26,30 @@ git clone https://github.com/Faril23netizen/micro_ros_assignment.git
 
 ## Prerequisites
 
-Sebelum memulai, pastikan kamu sudah menginstal beberapa aplikasi wajib di bawah ini. Jika kamu menggunakan komputer kosong (belum terinstal apa-apa), kerjakan langkah 1 dan 2 secara berurutan.
+Before proceeding, make sure you install the required applications below. If you are starting from a completely clean machine, perform steps 1 and 2 in order.
 
-1. **Peralatan Coding Raspberry Pi Pico (Pico SDK & Compiler)**
-   Untuk bisa memprogram Pico, kamu butuh *compiler* dan kumpulan kode dasar Pico (SDK). Kami sudah menyiapkan program otomatis untuk menginstalnya. Buka terminal dan jalankan:
+1. **Raspberry Pi Pico Coding Tools (Pico SDK & Compiler)**
+   To program the Pico, you need a C/C++ compiler and the Pico SDK. We have provided an automated script to install them. Open a terminal and run:
    ```bash
    cd ~/micro_ros_assignment/scripts
    ./install_pico_sdk.sh
    ```
-   Setelah selesai, **tutup terminal lama dan buka terminal baru**.
+   Once finished, **close the old terminal and open a new one**.
 
 2. **ROS 2 Humble**
-   Untuk melihat data dari Pico, kamu butuh ROS 2 Humble. Kami juga menyiapkan program otomatisnya. Cukup jalankan perintah ini di terminal baru:
+   To monitor the data from the Pico, you need ROS 2 Humble. We have also provided an automated installer script. Run this in your new terminal:
    ```bash
    cd ~/micro_ros_assignment/scripts
    ./install_ros2.sh
    ```
-   Sama seperti sebelumnya, setelah selesai pastikan kamu **menutup terminal lama dan membuka terminal baru** sebelum masuk ke Step 1.
+   As before, make sure to **close the old terminal and open a new one** before moving on to Step 1.
 
-3. **VMware Users (Penting!)**
-   Jika kamu menggunakan Linux di dalam aplikasi VMware, kamu **wajib** menyambungkan koneksi USB Pico ke dalam Linux setiap kali kamu mencolokkan kabelnya:
-   - Saat Pico dicolokkan, klik menu VMware di bagian atas: `VM` -> `Removable Devices`.
-   - Cari perangkat yang namanya mirip `Raspberry Pi Pico`, `Board CDC`, atau `USB Serial Device`.
-   - Klik **Connect (Disconnect from Host)**.
-   - *Catatan: Lakukan trik ini berulang-ulang setiap kali Pico dicabut-colok!*
+3. **VMware Users (Important!)**
+   If you are running Linux inside a VMware virtual machine, you **MUST** manually connect the Pico's USB connection into Linux every time you plug it in:
+   - When the Pico is plugged in, click the VMware menu at the top: `VM` -> `Removable Devices`.
+   - Look for a device named something like `Raspberry Pi Pico`, `Board CDC`, or `USB Serial Device`.
+   - Click **Connect (Disconnect from Host)**.
+   - *Note: Repeat this trick every time the Pico is unplugged and re-plugged!*
 
 ---
 
