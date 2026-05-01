@@ -128,7 +128,24 @@ Don't panic! Just follow this step-by-step guide:
 ### Step 1: Edit `main.cpp`
 Open the file `blink_synk/src/main.cpp` in your text editor.
 
-**A. Add New LED States**
+**A. Add New LED Pin Definitions**
+Find the `#define` block (around line 30) that looks like this:
+```cpp
+#define LED_PAD     0
+#define LED1_PAD    2
+#define LED2_PAD    3
+#define ONBOARD_LED 25
+```
+Add the new pin definitions for Worker 3 to 7 right below `LED2_PAD`:
+```cpp
+#define LED3_PAD    4
+#define LED4_PAD    5
+#define LED5_PAD    6
+#define LED6_PAD    7
+#define LED7_PAD    8
+```
+
+**B. Add New LED States**
 Find the code (around line 37) that says `volatile bool led_worker2_state = false;`. Add these lines right below it:
 ```cpp
 volatile bool led_worker3_state = false;
@@ -138,7 +155,7 @@ volatile bool led_worker6_state = false;
 volatile bool led_worker7_state = false;
 ```
 
-**B. Add Your Name to the Publisher**
+**C. Add Your Name to the Publisher**
 Find the `snprintf` function inside `microRosTask` (around line 111). Replace the whole `snprintf` section with this code (don't forget to put your actual Name and ID!):
 ```cpp
         // Add your Name and ID here!
@@ -155,17 +172,17 @@ Find the `snprintf` function inside `microRosTask` (around line 111). Replace th
         );
 ```
 
-**C. Create the New Workers**
-Find where `worker2` is created inside `void mainTask(void *params)` (around line 130). Add 5 new workers using different GPIO pins (Pins 4 to 8):
+**D. Create the New Workers**
+Find where `worker2` is created inside `void mainTask(void *params)` (around line 130). Add 5 new workers using the pin `#define`s you just created:
 ```cpp
-	BlinkWorker worker3(4); // LED connected to GPIO 4
-	BlinkWorker worker4(5); // LED connected to GPIO 5
-	BlinkWorker worker5(6); // LED connected to GPIO 6
-	BlinkWorker worker6(7); // LED connected to GPIO 7
-	BlinkWorker worker7(8); // LED connected to GPIO 8
+	BlinkWorker worker3(LED3_PAD); // LED connected to GPIO 4
+	BlinkWorker worker4(LED4_PAD); // LED connected to GPIO 5
+	BlinkWorker worker5(LED5_PAD); // LED connected to GPIO 6
+	BlinkWorker worker6(LED6_PAD); // LED connected to GPIO 7
+	BlinkWorker worker7(LED7_PAD); // LED connected to GPIO 8
 ```
 
-**D. Start the New Workers**
+**E. Start the New Workers**
 Scroll down slightly and find `worker2.start("Worker 2", TASK_PRIORITY);`. Start the tasks for your new workers right below it:
 ```cpp
 	worker3.start("Worker 3", TASK_PRIORITY);
