@@ -25,10 +25,10 @@ sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o
 
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
-# 3. Install ROS 2
+# 3. Install ROS 2 and micro-ROS dependencies
 echo "3. Mengunduh dan menginstal ROS 2 Humble (Ini agak lama, bisa ditinggal ngemil dulu!)..."
 sudo apt update
-sudo apt install ros-humble-desktop -y
+sudo apt install ros-humble-desktop ros-humble-micro-ros-msgs -y
 
 # 4. Automate source
 echo "4. Mengatur agar ROS 2 otomatis aktif setiap buka terminal..."
