@@ -4,6 +4,18 @@ This repository contains the complete assignment package for integrating **FreeR
 
 The goal of this assignment is to understand how FreeRTOS tasks can synchronize with each other locally on a microcontroller, and then broadcast their internal state to a ROS 2 network using the XRCE-DDS protocol.
 
+## Step 0: Clone This Repository
+
+Sebelum memulai, pastikan kamu sudah mengunduh folder tugas ini ke komputermu. Karena komputer kamu mungkin masih baru, instal `git` terlebih dahulu:
+
+Buka terminal dan jalankan:
+```bash
+sudo apt update
+sudo apt install git -y
+cd ~
+git clone https://github.com/Faril23netizen/micro_ros_assignment.git
+```
+
 ## Directory Structure
 
 - `blink_synk/` : The source code for the firmware.
@@ -19,7 +31,7 @@ Sebelum memulai, pastikan kamu sudah menginstal beberapa aplikasi wajib di bawah
 1. **Peralatan Coding Raspberry Pi Pico (Pico SDK & Compiler)**
    Untuk bisa memprogram Pico, kamu butuh *compiler* dan kumpulan kode dasar Pico (SDK). Kami sudah menyiapkan program otomatis untuk menginstalnya. Buka terminal dan jalankan:
    ```bash
-   cd scripts
+   cd ~/micro_ros_assignment/scripts
    ./install_pico_sdk.sh
    ```
    Setelah selesai, **tutup terminal lama dan buka terminal baru**.
@@ -27,7 +39,7 @@ Sebelum memulai, pastikan kamu sudah menginstal beberapa aplikasi wajib di bawah
 2. **ROS 2 Humble**
    Untuk melihat data dari Pico, kamu butuh ROS 2 Humble. Kami juga menyiapkan program otomatisnya. Cukup jalankan perintah ini di terminal baru:
    ```bash
-   cd scripts
+   cd ~/micro_ros_assignment/scripts
    ./install_ros2.sh
    ```
    Sama seperti sebelumnya, setelah selesai pastikan kamu **menutup terminal lama dan membuka terminal baru** sebelum masuk ke Step 1.
@@ -47,7 +59,7 @@ In this assignment, you must compile the firmware from source. Ensure you have t
 
 1. Open a terminal and navigate to the `blink_synk` directory:
    ```bash
-   cd blink_synk
+   cd ~/micro_ros_assignment/blink_synk
    mkdir build && cd build
    cmake ..
    make -j4
@@ -70,7 +82,7 @@ To receive the XRCE-DDS messages from the Pico, you need to run the agent. We ha
 Open a terminal and run:
 
 ```bash
-cd scripts/
+cd ~/micro_ros_assignment/scripts/
 ./run_agent.sh
 ```
 
@@ -91,7 +103,7 @@ Now that the Pico is connected, it is publishing the FreeRTOS task synchronizati
 Open a **NEW** terminal (leave the agent running in the first terminal), and run:
 
 ```bash
-cd scripts/
+cd ~/micro_ros_assignment/scripts/
 ./monitor_topics.sh
 ```
 
