@@ -120,14 +120,98 @@ ros2 topic echo /led_worker2/state
 
 ## Assignment Task
 
-Your task is to modify the source code in the `blink_synk` directory to achieve the following:
+Your task is to modify the source code to support **8 LEDs** and broadcast your **Name and Student ID** to the ROS 2 network! 
 
-1. **Expand to 8 LEDs**: Currently, the system synchronizes 3 LEDs. You need to modify the code to synchronize a total of 8 LEDs using FreeRTOS tasks.
-2. **Add Your Name and Student ID**: Modify the combined ROS 2 String topic (`/blink_synk/status`) to broadcast your Name and Student ID along with the LED states.
+Don't panic! Just follow this step-by-step guide:
 
-**Tips for the Assignment:**
-- Look into `blink_synk/src/main.cpp` to see how tasks are created and how the micro-ROS publisher is set up.
-- Look into `blink_synk/src/BlinkWorker.cpp` and `blink_synk/src/BlinkAgent.cpp` to understand how the LED logic and FreeRTOS semaphores/notifications are currently implemented.
-- Don't forget to recompile the firmware (`make -j4` inside the `build` directory) and re-flash the Pico every time you make changes to the code.
+### Step 1: Edit `main.cpp`
+Open the file `blink_synk/src/main.cpp` in your text editor.
 
-Happy Hacking!
+**A. Add New LED States**
+Find the code (around line 37) that says `volatile bool led_worker2_state = false;`. Add these lines right below it:
+```cpp
+volatile bool led_worker3_state = false;
+volatile bool led_worker4_state = false;
+volatile bool led_worker5_state = false;
+volatile bool led_worker6_state = false;
+volatile bool led_worker7_state = false;
+```
+
+**B. Add Your Name to the Publisher**
+Find the `snprintf` function inside `microRosTask` (around line 111). Replace the whole `snprintf` section with this code (don't forget to put your actual Name and ID!):
+```cpp
+        // Add your Name and ID here!
+        snprintf(status_buf, sizeof(status_buf),
+            "Name: [YOUR_NAME], ID: [YOUR_ID] | Agent:%s | W1:%s | W2:%s | W3:%s | W4:%s | W5:%s | W6:%s | W7:%s",
+            led_agent_state ? "ON " : "OFF",
+            led_worker1_state ? "ON " : "OFF",
+            led_worker2_state ? "ON " : "OFF",
+            led_worker3_state ? "ON " : "OFF",
+            led_worker4_state ? "ON " : "OFF",
+            led_worker5_state ? "ON " : "OFF",
+            led_worker6_state ? "ON " : "OFF",
+            led_worker7_state ? "ON " : "OFF" // CAREFUL: No comma on the last line!
+        );
+```
+
+**C. Create the New Workers**
+Find where `worker2` is created inside `void mainTask(void *params)` (around line 130). Add 5 new workers using different GPIO pins (Pins 4 to 8):
+```cpp
+	BlinkWorker worker3(4); // LED connected to GPIO 4
+	BlinkWorker worker4(5); // LED connected to GPIO 5
+	BlinkWorker worker5(6); // LED connected to GPIO 6
+	BlinkWorker worker6(7); // LED connected to GPIO 7
+	BlinkWorker worker7(8); // LED connected to GPIO 8
+```
+
+**D. Start the New Workers**
+Scroll down slightly and find `worker2.start("Worker 2", TASK_PRIORITY);`. Start the tasks for your new workers right below it:
+```cpp
+	worker3.start("Worker 3", TASK_PRIORITY);
+	worker4.start("Worker 4", TASK_PRIORITY);
+	worker5.start("Worker 5", TASK_PRIORITY);
+	worker6.start("Worker 6", TASK_PRIORITY);
+	worker7.start("Worker 7", TASK_PRIORITY);
+```
+Save the `main.cpp` file (`Ctrl+S`).
+
+### Step 2: Edit `BlinkWorker.cpp`
+Open the file `blink_synk/src/BlinkWorker.cpp`. This file controls when the LEDs turn ON and OFF.
+
+**A. Add External Declarations**
+Find the line `extern volatile bool led_worker2_state;` (around line 43). Add these below it:
+```cpp
+extern volatile bool led_worker3_state;
+extern volatile bool led_worker4_state;
+extern volatile bool led_worker5_state;
+extern volatile bool led_worker6_state;
+extern volatile bool led_worker7_state;
+```
+
+**B. Update the ON/OFF Logic**
+Inside the `while (true)` loop, find `if (xLedPad == 3) led_worker2_state = true;`. Add the logic for your new pins:
+```cpp
+        if (xLedPad == 4) led_worker3_state = true;
+        if (xLedPad == 5) led_worker4_state = true;
+        if (xLedPad == 6) led_worker5_state = true;
+        if (xLedPad == 7) led_worker6_state = true;
+        if (xLedPad == 8) led_worker7_state = true;
+```
+Scroll down a little bit to find `if (xLedPad == 3) led_worker2_state = false;`. Add the "false" logic below it:
+```cpp
+        if (xLedPad == 4) led_worker3_state = false;
+        if (xLedPad == 5) led_worker4_state = false;
+        if (xLedPad == 6) led_worker5_state = false;
+        if (xLedPad == 7) led_worker6_state = false;
+        if (xLedPad == 8) led_worker7_state = false;
+```
+Save the `BlinkWorker.cpp` file (`Ctrl+S`).
+
+### Step 3: Recompile and Test!
+Now that you have modified the code, open your terminal and recompile:
+```bash
+cd ~/micro_ros_assignment/blink_synk/build
+make -j4
+```
+If it succeeds without errors, copy the new `BlinkSynk.uf2` file into your Pico just like you did in Step 1.
+Run the Agent and Monitor scripts, and you should see your Name and all 8 LEDs proudly displayed on the ROS 2 network! 🚀
